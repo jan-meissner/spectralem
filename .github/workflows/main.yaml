@@ -1,0 +1,89 @@
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch:
+
+
+name: Test
+
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-18.04", "macos-latest", "windows-latest"]
+        r_version: ["release"]
+        include:
+          - os: ubuntu-18.04
+            cran: https://demo.rstudiopm.com/all/__linux__/bionic/latest
+            install: 0
+            r_version: "release"
+          - os: ubuntu-18.04
+            cran: https://demo.rstudiopm.com/all/__linux__/bionic/latest
+            install: 1
+            r_version: "4.0"
+          - os: macos-latest
+            install: 1
+            r_version: "release"
+          - os: windows-latest
+            install: 1
+            r_version: "release"
+          - os: windows-latest
+            install: 1
+            r_version: "3.6"
+
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os }} (${{ matrix.r_version }})
+    timeout-minutes: 120
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      INSTALL_TORCH: ${{ matrix.install }}
+      CRAN: ${{ matrix.cran }}
+      TORCH_LOG: 2
+      TORCH_TEST: 1
+      TORCH_INSTALL: 1
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r_version }}
+      - uses: r-lib/actions/setup-pandoc@v2
+      - name: Install system dependencies
+        if: runner.os == 'Linux'
+        env:
+          RHUB_PLATFORM: linux-x86_64-ubuntu-gcc
+        run: |
+          Rscript -e "install.packages(c('remotes'))" -e "remotes::install_github('r-hub/sysreqs')"
+          sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
+          sudo -s eval "$sysreqs"
+      - name: Install dependencies
+        run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_deps(dependencies = TRUE)"
+      - name: Print R session information
+        run: |
+          if (utils::packageVersion("sessioninfo") >= "1.2.1") {
+            sessioninfo::session_info(pkgs = "installed", include_base = TRUE)
+          } else {
+            options(width = 200)
+            sessioninfo::session_info(rownames(installed.packages()), include_base = TRUE)
+          }
+        shell: Rscript {0}
+      - name: Check
+        run:  |
+          error_on <- if (.Platform$OS.type == "windows") "error" else "warning"
+          rcmdcheck::rcmdcheck(args = c("--no-multiarch", "--no-manual"), error_on = error_on, check_dir = "check")
+        shell: Rscript {0}
+      - name: Show testthat output
+        if: always()
+        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
+        shell: bash
+      - name: Logs
+        if: ${{ failure() }}
+        run: if [ -f lantern.log ]; then cat lantern.log; fi
+        shell: bash

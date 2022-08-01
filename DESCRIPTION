@@ -1,0 +1,24 @@
+Package: spectralem
+Type: Package
+Title: EM Algorithm to fit Voigt profiles to spectral data
+Version: 0.0.0.9000
+Authors@R: c(
+    person("Jan", "Meißner", email = "philipp.meissner@rwth-aachen.de", role = c("aut", "cre"))
+    )
+Description: Implements an EM algorithm to fit spectral data with Voigt profiles <paper doi>.
+License: MIT + file LICENSE
+URL: https://github.com/jan-meissner/spectralem
+BugReports: https://github.com/jan-meissner/spectralem/issues
+Encoding: UTF-8
+Imports:
+    R6,
+    MASS,
+    RcppFaddeeva,
+    pracma
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Suggests:
+    testthat (>= 3.0.0),
+    knitr (>= 1.36),
+    rmarkdown
+VignetteBuilder: knitr

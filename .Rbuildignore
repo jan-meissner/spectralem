@@ -1,0 +1,11 @@
+^spectralem\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^\.github$
+^\.idea$
+^\tools$
+^deploy_tools\.R$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^cran-comments\.md$
