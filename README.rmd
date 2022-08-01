@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# torch <a href='https://torch.mlverse.org'><img src='man/figures/torch.png' align="right" height="139" /></a>
+# spectralem
 
 ## Installation
 
