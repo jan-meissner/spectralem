@@ -58,22 +58,42 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="spectralem-">spectralem <a href="https://torch.mlverse.org" class="external-link"><img src="reference/figures/torch.png" align="right" height="139"></a>
-<a class="anchor" aria-label="anchor" href="#spectralem-"></a>
+<div class="page-header"><h1 id="spectralem">spectralem<a class="anchor" aria-label="anchor" href="#spectralem"></a>
 </h1></div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>If <code>RcppFaddeeva</code> is not available for the current R version use:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_version.html" class="external-link">install_version</a></span><span class="op">(</span><span class="st">"RcppFaddeeva"</span>, <span class="st">"0.2.2"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_version.html" class="external-link">install_version</a></span><span class="op">(</span><span class="st">"RcppFaddeeva"</span>, <span class="st">"0.2.2"</span><span class="op">)</span></span></code></pre></div>
 <p>You can install the development version with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"jan-meissner/spectralem"</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level2"><h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
-</h2></div>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jan-meissner/spectralem" class="external-link">spectralem</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/data.synthetic.stormyclouds.html">data.synthetic.stormyclouds</a></span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">1</span>, kp <span class="op">=</span> <span class="fl">30</span>, noise <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">y</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/spectralem.html">spectralem</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, max_peaks <span class="op">=</span> <span class="fl">30</span>, max_iter <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<span><span class="co">#&gt; ================================================================================</span></span>
+<span></span>
+<span><span class="co"># get position of fitted peaks</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">fit_params</span><span class="op">$</span><span class="va">pos</span></span>
+<span><span class="co">#&gt;  [1] 671.1593 502.8131 326.5182 274.6381 354.3956 252.1974 313.7891 801.7046</span></span>
+<span><span class="co">#&gt;  [9] 706.4931 411.1171 771.9869 187.7639 547.1771 854.1433 726.4113 572.6754</span></span>
+<span><span class="co">#&gt; [17] 691.0692 516.7862 236.2330 275.0527 811.3345 303.7524 772.5411 550.5499</span></span>
+<span><span class="co">#&gt; [25] 203.6653 182.2159 802.0503 801.8416 801.8487 801.8521</span></span>
+<span></span>
+<span><span class="co"># plot the fit</span></span>
+<span><span class="fu">plot_helper</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">res</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-2-1.svg" width="100%"></p>
+</div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
