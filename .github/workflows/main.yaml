@@ -1,3 +1,5 @@
+# copied from torch for R
+
 on:
   push:
     branches:
@@ -63,6 +65,8 @@ jobs:
           Rscript -e "install.packages(c('remotes'))" -e "remotes::install_github('r-hub/sysreqs')"
           sysreqs=$(Rscript -e "cat(sysreqs::sysreq_commands('DESCRIPTION'))")
           sudo -s eval "$sysreqs"
+      - name: Install RcppFaddeeva
+        run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_version("RcppFaddeeva", "0.2.2")"
       - name: Install dependencies
         run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_deps(dependencies = TRUE)"
       - name: Print R session information
