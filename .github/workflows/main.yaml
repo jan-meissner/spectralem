@@ -35,9 +35,6 @@ jobs:
           - os: windows-latest
             install: 1
             r_version: "release"
-          - os: windows-latest
-            install: 1
-            r_version: "3.6"
 
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} (${{ matrix.r_version }})

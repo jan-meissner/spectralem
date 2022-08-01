@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# torch <a href='https://torch.mlverse.org'><img src='man/figures/torch.png' align="right" height="139" /></a>
+# spectralem <a href='https://torch.mlverse.org'><img src='man/figures/torch.png' align="right" height="139" /></a>
 
 ## Installation
 
