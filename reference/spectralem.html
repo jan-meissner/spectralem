@@ -14,7 +14,7 @@ The algorithm was developed to produce a fast and decent fit that general non li
     
     <a class="navbar-brand me-2" href="../index.html">spectralem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,8 +67,47 @@ The algorithm was developed to produce a fast and decent fit that general non li
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
+    <dl><dt>x</dt>
+<dd><p>the x coordinates of the Raman signal</p></dd>
 
-  </main></div>
+
+<dt>y</dt>
+<dd><p>the function values of the function to be fit evaluated at the x coordinates</p></dd>
+
+
+<dt>max_peaks</dt>
+<dd><p>the maximal number of components to fit</p></dd>
+
+
+<dt>max_iter</dt>
+<dd><p>the maximal number of iterations</p></dd>
+
+
+<dt>print_progress</dt>
+<dd><p>(Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.</p></dd>
+
+
+<dt>add_component_every_iters</dt>
+<dd><p>How many iteration to perform until a new peak is added. For all peaks to spawn max_iter &gt;= (2+max_peaks) * add_component_every_iters needs to be satisfied.</p></dd>
+
+
+<dt>start_peaks</dt>
+<dd><p>initial peak parameters allows user to pass know peaks. list of vectors</p></dd>
+
+
+<dt>background_model</dt>
+<dd><p>defines the background model, support BSplines and a linear background. Instance of class which implements AbstractComponent.</p></dd>
+
+
+<dt>placement_strategy</dt>
+<dd><p>(Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.</p></dd>
+
+</dl></div>
+
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
