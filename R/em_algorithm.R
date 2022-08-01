@@ -160,6 +160,15 @@ get_fit_and_fit_params <- function(data) {
 #' Most useful to get a fast and decent fit.
 #' The algorithm was developed to produce a fast and decent fit that general non linear optimizers such as optim fail to produce.
 #'
+#' @param x the x coordinates of the Raman signal
+#' @param y the function values of the function to be fit evaluated at the x coordinates
+#' @param max_peaks the maximal number of components to fit
+#' @param max_iter the maximal number of iterations
+#' @param add_component_every_iters How many iteration to perform until a new peak is added. For all peaks to spawn max_iter >= (2+max_peaks) * add_component_every_iters needs to be satisfied.
+#' @param start_peaks initial peak parameters allows user to pass know peaks. list of vectors
+#' @param background_model defines the background model, support BSplines and a linear background. Instance of class which implements AbstractComponent.
+#' @param placement_strategy (Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.
+#' @param print_progress (Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.
 #'
 #' @export
 spectralem <- function(x, y, max_peaks, max_iter,

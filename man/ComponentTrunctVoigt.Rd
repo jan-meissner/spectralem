@@ -18,8 +18,6 @@ Truncation is needed to deal with peaks which have significant mass outside the 
 \item{\code{gwidth}}{gaussian width of the voigt profile}
 
 \item{\code{lwidth}}{gaussian width of the voigt profile}
-
-\item{\code{min_width}}{gaussian width of the voigt profile}
 }
 \if{html}{\out{</div>}}
 }

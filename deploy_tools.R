@@ -1,7 +1,7 @@
 library(devtools)
 library(roxygen2)
-main_dir <- 'C:/Users/Jan/Desktop/ISW_SpectraBayes/ISW_SpectraBayes/spectralem'
-setwd(file.path(main_dir, "spectralem"))
+#main_dir <- 'C:/Users/Jan/Desktop/ISW_SpectraBayes/ISW_SpectraBayes/spectralem'
+#setwd(file.path(main_dir, "spectralem"))
 
 #https://www.marinedatascience.co/blog/2020/01/09/checklist-for-r-package-re-submissions-on-cran/
 

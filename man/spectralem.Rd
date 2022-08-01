@@ -16,6 +16,25 @@ spectralem(
   placement_strategy = StrategyMaxSmoothLossfield$new()
 )
 }
+\arguments{
+\item{x}{the x coordinates of the Raman signal}
+
+\item{y}{the function values of the function to be fit evaluated at the x coordinates}
+
+\item{max_peaks}{the maximal number of components to fit}
+
+\item{max_iter}{the maximal number of iterations}
+
+\item{print_progress}{(Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.}
+
+\item{add_component_every_iters}{How many iteration to perform until a new peak is added. For all peaks to spawn max_iter >= (2+max_peaks) * add_component_every_iters needs to be satisfied.}
+
+\item{start_peaks}{initial peak parameters allows user to pass know peaks. list of vectors}
+
+\item{background_model}{defines the background model, support BSplines and a linear background. Instance of class which implements AbstractComponent.}
+
+\item{placement_strategy}{(Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.}
+}
 \description{
 Requires no starting fit.
 Most useful to get a fast and decent fit.

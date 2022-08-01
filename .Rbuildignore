@@ -8,4 +8,7 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^README\.html$
+^README\.rmd$
 ^cran-comments\.md$
+^CRAN-RELEASE$

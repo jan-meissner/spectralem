@@ -1,7 +1,7 @@
 Package: spectralem
 Type: Package
 Title: EM Algorithm to fit Voigt profiles to spectral data
-Version: 0.0.0.9000
+Version: 0.1
 Authors@R: c(
     person("Jan", "Meißner", email = "philipp.meissner@rwth-aachen.de", role = c("aut", "cre"))
     )

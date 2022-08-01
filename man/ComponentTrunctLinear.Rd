@@ -43,15 +43,15 @@ Component which models a linear background a x + b.
 \subsection{Method \code{new()}}{
 Initializes the linear component.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ComponentTrunctLinear$new(nu_max = 1e+08, pi = 1)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ComponentTrunctLinear$new(pi = 1)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{nu_max}}{internal parameter, should be left as is.}
-
 \item{\code{pi}}{initial value for pi.}
+
+\item{\code{nu_max}}{internal parameter, should be left as is.}
 }
 \if{html}{\out{</div>}}
 }

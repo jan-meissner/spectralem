@@ -8,6 +8,7 @@
 #'
 #' @export
 #' @importFrom MASS ginv
+#' @importFrom R6 is.R6
 ComponentTrunctVoigt <- R6::R6Class(
   "ComponentTrunctVoigt",
   inherit = AbstractComponent,
