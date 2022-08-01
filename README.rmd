@@ -1,5 +1,6 @@
 ---
 output: github_document
+always_allow_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -7,9 +8,12 @@ output: github_document
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = FALSE,
+  message = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  dev = 'svg' # set output device to svg
 )
 ```
 
@@ -20,7 +24,6 @@ knitr::opts_chunk$set(
 If `RcppFaddeeva` is not available for the current R version use:
 
 ```r
-library(remotes)
 remotes::install_version("RcppFaddeeva", "0.2.2")
 ```
 
@@ -31,5 +34,32 @@ remotes::install_github("jan-meissner/spectralem")
 ```
 
 ## Examples
+
+```{r include = FALSE}
+plot_helper <- function(x, y, fit){
+  library(ggplot2)
+    pd <- data.frame(
+      x=rep(x, 2),
+      y = c(fit, y),
+      type = rep(c("fit","true"), each = length(x))
+    )
+    ggplot(pd, aes(x=x, y=y, color=type)) + geom_line() + theme_bw()
+}
+```
+```{r}
+library(spectralem)
+
+data <- data.synthetic.stormyclouds(seed = 1, kp = 30, noise = 0.001)
+x <- data$x
+y <- data$y
+
+res <- spectralem(x, y, max_peaks = 30, max_iter = 500)
+
+# get position of fitted peaks
+res$fit_params$pos
+
+# plot the fit
+plot_helper(x, y, res$fit)
+```
 
 

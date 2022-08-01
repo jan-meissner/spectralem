@@ -183,7 +183,7 @@ spectralem <- function(x, y, max_peaks, max_iter,
   )
   p_y <- d$p_y
 
-  pb <- utils::txtProgressBar(0, max_iter)
+  pb <- utils::txtProgressBar(0, max_iter, style = 3)
   for (i in 1:max_iter) {
     if (print_progress) utils::setTxtProgressBar(pb, i)
     d$convergence_diagnostic[i] <- total_loglikelihood(x, p_y, d$components)
