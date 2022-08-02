@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">spectralem</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,15 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
+</li>
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/get_started.html">Get started</a>
+  </div>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -57,16 +66,20 @@
     </div>
     <div class="section level2">
     <h2 id="public-fields">Public fields<a class="anchor" aria-label="anchor" href="#public-fields"></a></h2>
-    <p></p><div class="r6-fields"><dl><dt><code>init_gauss_std</code></dt>
-<dd><p>initial gwidth of the .</p></dd>
+    <p></p><div class="r6-fields"><dl><dt><code>typical_width</code></dt>
+<dd><p>typical width of peaks, used as the width of the blur kernel and for the gwidth of the newly placed peak</p></dd>
 
 
-<dt><code>blur_sig</code></dt>
-<dd><p>radius of gaussian smoothing kernel applied to the loss.</p></dd>
+<dt><code>min_width</code></dt>
+<dd><p>minimal width of a placed peak</p></dd>
 
 
 <dt><code>burn_in_iters</code></dt>
-<dd><p>number of iterations to perform with fixed densities.</p></dd>
+<dd><p>number of iterations to perform with fixed densities</p></dd>
+
+
+<dt><code>possible_peak_positions</code></dt>
+<dd><p>range of possible peak positions</p></dd>
 
 
 </dl><p></p></div>
@@ -85,24 +98,29 @@
 <p>Initialize the strategy.</p><div class="section">
 <h4 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a></h4>
 <p></p><div class="r"><div class="sourceCode"><pre><code><span><span class="va"><a href="../reference/StrategyMaxSmoothLossfield.html">StrategyMaxSmoothLossfield</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
-<span>  init_gauss_std <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  blur_sig <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  burn_in_iters <span class="op">=</span> <span class="fl">20</span></span>
+<span>  <span class="va">min_width</span>,</span>
+<span>  <span class="va">typical_width</span>,</span>
+<span>  <span class="va">burn_in_iters</span>,</span>
+<span>  <span class="va">possible_peak_positions</span></span>
 <span><span class="op">)</span></span></code></pre></div><p></p></div>
 </div>
 
 <div class="section">
 <h4 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h4>
-<p></p><div class="arguments"><dl><dt><code>init_gauss_std</code></dt>
-<dd><p>initial gwidth of the .</p></dd>
+<p></p><div class="arguments"><dl><dt><code>min_width</code></dt>
+<dd><p>minimal gwidth and lwidth for the newly placed peak</p></dd>
 
 
-<dt><code>blur_sig</code></dt>
-<dd><p>radius of gaussian smoothing kernel applied to the loss.</p></dd>
+<dt><code>typical_width</code></dt>
+<dd><p>typical width of peaks, used as the width of the blur kernel and for the gwidth of the newly placed peak</p></dd>
 
 
 <dt><code>burn_in_iters</code></dt>
 <dd><p>number of iterations to perform with fixed densities.</p></dd>
+
+
+<dt><code>possible_peak_positions</code></dt>
+<dd><p>range of possible peak positions</p></dd>
 
 
 </dl><p></p></div>
