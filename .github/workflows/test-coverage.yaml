@@ -21,10 +21,11 @@ jobs:
         with:
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::covr
-          needs: coverage
+      - name: Install RcppFaddeeva
+        run: Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_version('RcppFaddeeva', '0.2.2')"
+      - name: Install dependencies
+        run: |
+          Rscript -e "install.packages(c('remotes', 'rcmdcheck', 'covr'))" -e "remotes::install_deps(dependencies = TRUE)"
 
       - name: Test coverage
         run: covr::codecov(quiet = FALSE)

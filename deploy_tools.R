@@ -7,7 +7,9 @@ devtools::document()
 devtools::build_manual()
 
 # stylr
+library(styler)
 styler::style_pkg()
+styler::style_pkg(filetype = c(".R", ".Rmd", ".Rmarkdown", ".Rnw"))
 
 # update R
 install.packages("installr")

@@ -80,8 +80,8 @@ fit <- voigt.model(x, res$fit_params)
 
 # plot the fit
 library(plotly)
-fig <- plotly::plot_ly(x = x, y = y, name = 'true', type = 'scatter', mode = 'lines')
-fig <- fig %>% plotly::add_lines(y = fit, name = 'fit', type = 'scatter', mode = 'lines')
+fig <- plotly::plot_ly(x = x, y = y, name = "true", type = "scatter", mode = "lines")
+fig <- fig %>% plotly::add_lines(y = fit, name = "fit", type = "scatter", mode = "lines")
 fig
 ```
 ## Passing optional start parameters
@@ -103,8 +103,8 @@ res <- spectralem(
 
 # plot the fit
 library(plotly)
-fig <- plotly::plot_ly(x = data$x, y = data$y, name = 'true', type = 'scatter', mode = 'lines')
-fig <- fig %>% plotly::add_lines(y = res$fit, name = 'fit', type = 'scatter', mode = 'lines')
+fig <- plotly::plot_ly(x = data$x, y = data$y, name = "true", type = "scatter", mode = "lines")
+fig <- fig %>% plotly::add_lines(y = res$fit, name = "fit", type = "scatter", mode = "lines")
 fig
 ```
 ## Using BSplines as a background model
@@ -117,14 +117,14 @@ y <- data$y
 
 # add spline background to data
 library(splines2)
-bsMat <- bSpline(x, df=3)
+bsMat <- bSpline(x, df = 3)
 f1 <- c(bsMat[, 1])
 f2 <- c(bsMat[, 2])
 f3 <- c(bsMat[, 3])
-y <- y + 0.4*f1 + 0.04*f2 + 0.2*f3
+y <- y + 0.4 * f1 + 0.04 * f2 + 0.2 * f3
 
 # fit
-res <- spectralem(x, y, K = 4, background_model = list(linear=TRUE, f1, f2, f3), print_progress = FALSE)
+res <- spectralem(x, y, K = 4, background_model = list(linear = TRUE, f1, f2, f3), print_progress = FALSE)
 
 # voigt.model does not support non linear background; add them manually
 alpha <- res$fit_params$background_amps
@@ -133,7 +133,7 @@ fit <- voigt.model(x, res$fit_params) + f1 * alpha[1] + f2 * alpha[2] + f3 * alp
 
 # plot the fit
 library(plotly)
-fig <- plotly::plot_ly(x = x, y = y, name = 'true', type = 'scatter', mode = 'lines')
-fig <- fig %>% plotly::add_lines(y = fit, name = 'fit', type = 'scatter', mode = 'lines')
+fig <- plotly::plot_ly(x = x, y = y, name = "true", type = "scatter", mode = "lines")
+fig <- fig %>% plotly::add_lines(y = fit, name = "fit", type = "scatter", mode = "lines")
 fig
 ```

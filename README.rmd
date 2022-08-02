@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
-  dev = 'svg' # set output device to svg
+  dev = "svg" # set output device to svg
 )
 ```
 
@@ -59,7 +59,8 @@ library(ggplot2)
 pd <- data.frame(x = x, y = y, fit = voigt.model(x, res$fit_params))
 ggplot(pd, aes(x)) +
   geom_line(aes(y = y, colour = "y")) +
-  geom_line(aes(y = fit, colour = "fit")) + theme_bw()
+  geom_line(aes(y = fit, colour = "fit")) +
+  theme_bw()
 ```
 
 
