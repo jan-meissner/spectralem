@@ -51,4 +51,10 @@
   <url>
     <loc>/reference/spectralem.html</loc>
   </url>
+  <url>
+    <loc>/reference/synthetic.signal.html</loc>
+  </url>
+  <url>
+    <loc>/reference/voigt.model.html</loc>
+  </url>
 </urlset>
