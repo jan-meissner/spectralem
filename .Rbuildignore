@@ -12,3 +12,4 @@
 ^README\.rmd$
 ^cran-comments\.md$
 ^CRAN-RELEASE$
+^coverage_latest\.html$

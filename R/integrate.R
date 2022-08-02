@@ -1,10 +1,11 @@
-#' Compute the area of a function with values 'y' at the points 'x'.
+#' Compute the area of a function with values \code{y} at the points \code{x}.
 #'
 #' Wrapper function for trapezoidal integration from pracma.
 #'
-#' @param x coordinates of points on the x-axis
+#' @param x coordinates of points on the \code{x}-axis
 #' @param y coordinates of function values
-#' @export
+#'
+#' @keywords internal
 integrate <- function(x, y) {
   return(pracma::trapz(x, y))
 }

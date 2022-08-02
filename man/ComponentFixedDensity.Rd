@@ -9,6 +9,7 @@ Requires fixed background function.
 \details{
 Component which models a fixed background function.
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[spectralem:AbstractComponent]{spectralem::AbstractComponent}} -> \code{ComponentFixedDensity}
 }
@@ -96,7 +97,7 @@ Fits the component to the signal rf.
 \if{html}{\out{<a id="method-ComponentFixedDensity-get_amp"></a>}}
 \if{latex}{\out{\hypertarget{method-ComponentFixedDensity-get_amp}{}}}
 \subsection{Method \code{get_amp()}}{
-Gets amplitude of the voigt profile.
+Gets amplitude relative to f.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ComponentFixedDensity$get_amp()}\if{html}{\out{</div>}}
 }

@@ -6,6 +6,7 @@
 \description{
 Component which models a linear background a x + b.
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[spectralem:AbstractComponent]{spectralem::AbstractComponent}} -> \code{ComponentTrunctLinear}
 }

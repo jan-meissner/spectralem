@@ -44,3 +44,6 @@ plot_fit <- function(x, y, res = NULL) {
   )
   fig %>% show()
 }
+
+
+fig <- plotly::plot_ly(y, type = "scatter", mode = "lines")

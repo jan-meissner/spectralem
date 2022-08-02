@@ -7,7 +7,7 @@
 #' @description
 #' Requires fixed background function.
 #'
-#' @export
+#' @keywords internal
 ComponentFixedDensity <- R6::R6Class(
   "ComponentFixedDensity",
   inherit = AbstractComponent,
@@ -45,13 +45,13 @@ ComponentFixedDensity <- R6::R6Class(
     },
 
     #' @description
-    #' Gets amplitude of the voigt profile.
+    #' Gets amplitude relative to f.
     #'
     get_amp = function() {
       self$pi / private$norm
     }
   ),
-  list(
+  private = list(
     norm = NULL
   )
 )

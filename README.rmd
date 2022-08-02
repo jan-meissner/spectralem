@@ -18,6 +18,10 @@ knitr::opts_chunk$set(
 ```
 
 # spectralem
+[![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml)
+[![lint](https://github.com/jan-meissner/spectralem/actions/workflows/lint.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/lint.yaml)
+[![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/pkgdown.yaml)
+[![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/test-coverage.yaml)
 
 ## Installation
 
@@ -36,30 +40,26 @@ remotes::install_github("jan-meissner/spectralem")
 ## Examples
 
 ```{r include = FALSE}
-plot_helper <- function(x, y, fit){
-  library(ggplot2)
-    pd <- data.frame(
-      x=rep(x, 2),
-      y = c(fit, y),
-      type = rep(c("fit","true"), each = length(x))
-    )
-    ggplot(pd, aes(x=x, y=y, color=type)) + geom_line() + theme_bw()
-}
+library(ggplot2)
 ```
 ```{r}
 library(spectralem)
 
-data <- data.synthetic.stormyclouds(seed = 1, kp = 30, noise = 0.001)
+data <- synthetic.signal(seed = 1, K = 30, noise = 0.001)
 x <- data$x
 y <- data$y
 
-res <- spectralem(x, y, max_peaks = 30, max_iter = 500)
+res <- spectralem(x, y, K = 30)
 
 # get position of fitted peaks
 res$fit_params$pos
 
 # plot the fit
-plot_helper(x, y, res$fit)
+library(ggplot2)
+pd <- data.frame(x = x, y = y, fit = voigt.model(x, res$fit_params))
+ggplot(pd, aes(x)) +
+  geom_line(aes(y = y, colour = "y")) +
+  geom_line(aes(y = fit, colour = "fit")) + theme_bw()
 ```
 
 

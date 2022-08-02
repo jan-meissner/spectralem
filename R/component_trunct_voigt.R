@@ -6,7 +6,7 @@
 #' Component which models a truncated voigt profile. Models a voigt peak in the signal.
 #' Truncation is needed to deal with peaks which have significant mass outside the x range.
 #'
-#' @export
+#' @keywords internal
 #' @importFrom MASS ginv
 #' @importFrom R6 is.R6
 ComponentTrunctVoigt <- R6::R6Class(
@@ -27,8 +27,10 @@ ComponentTrunctVoigt <- R6::R6Class(
     #'
     #' @param pi initial value for pi.
     #' @param min_width minimal value for lwidth and gwidth
-    initialize = function(pi = 1, min_width = 1e-8) {
+    #' @param possible_peak_positions range of possible peak positions
+    initialize = function(min_width, possible_peak_positions, pi = 1) {
       private$min_width <- min_width
+      private$possible_peak_positions <- possible_peak_positions
       self$pi <- pi
     },
 
@@ -37,7 +39,7 @@ ComponentTrunctVoigt <- R6::R6Class(
     #'
     #' @param x a vector of points at which the density is evaluated.
     density = function(x) {
-      private$x <- x
+      private$cache_x <- x
       f <- RcppFaddeeva::Voigt(x, self$pos, self$gwidth, self$lwidth)
       ftrunct <- f / integrate(x, f)
       return(ftrunct)
@@ -54,10 +56,13 @@ ComponentTrunctVoigt <- R6::R6Class(
       minusQ_grad <- function(cur) -private$Q_with_gradient(x, rf, cur[1], cur[2], cur[3])$grad
 
       # plotdebug(x, rf)
-      # guess initial values for optim
+      # guess initial values for optim with $guess blindly
       blind_guess <- private$guess(x, rf)
-      blind_guess <- c(blind_guess[1], pmax(blind_guess[2:3], private$min_width))
+
+      # last fit as guess
       last_guess <- c(self$pos, self$gwidth, self$lwidth)
+
+      # take better of the two guesses
       minusQ_blind_guess <- minusQ(blind_guess)
       minusQ_last_guess <- if (is.null(last_guess)) Inf else minusQ(last_guess)
       if (minusQ_blind_guess < minusQ_last_guess) {
@@ -68,10 +73,16 @@ ComponentTrunctVoigt <- R6::R6Class(
         guess_minusQ <- minusQ_last_guess
       }
 
+      pos_upper <- max(private$possible_peak_positions)
+      pos_lower <- min(private$possible_peak_positions)
+      guess <- c(max(min(guess[1], pos_upper), pos_lower), guess[2], guess[3])
+
+
       # optim
       res <- optim(
         guess,
-        lower = c(0, private$min_width, private$min_width),
+        lower = c(pos_lower, private$min_width, private$min_width),
+        upper = c(pos_upper, Inf, Inf),
         minusQ,
         minusQ_grad,
         method = "L-BFGS-B"
@@ -84,6 +95,7 @@ ComponentTrunctVoigt <- R6::R6Class(
         est <- guess
       }
 
+      # cat('pos', est[[1]], 'widths', est[[2]], est[[3]], '\n')
       self$set_params(est[[1]], est[[2]], est[[3]])
       self
     },
@@ -111,7 +123,7 @@ ComponentTrunctVoigt <- R6::R6Class(
     #' Gets amplitude of the voigt profile.
     #'
     get_amp = function() {
-      x <- private$x
+      x <- private$cache_x
       if (is.null(x)) {
         stop("Amp can only be calculated after self$density has been called.")
       }
@@ -120,16 +132,17 @@ ComponentTrunctVoigt <- R6::R6Class(
     }
   ),
   private = list(
-    x = NULL,
     min_width = NULL,
-    last_Q_gradient = NULL,
-    last_Q = NULL,
-    last_Q_signature = c(0, 0, 0),
-    dintegrate = numeric(0),
-    windowsize = 5,
+    possible_peak_positions = NULL,
+    cache_x = NULL,
+    cache_last_Q_gradient = NULL,
+    cache_last_Q = NULL,
+    cache_last_Q_signature = c(0, 0, 0),
+    cache_dintegrate = numeric(0),
+    Q_calls = 0, # diagnostic
     set_dintegrate = function(x) {
-      if (length(x) != length(private$dintegrate)) {
-        private$dintegrate <- sapply(
+      if (length(x) != length(private$cache_dintegrate)) {
+        private$cache_dintegrate <- sapply(
           seq_along(x),
           function(i) integrate(x, replace(numeric(length(x)), i, 1))
         )
@@ -139,8 +152,8 @@ ComponentTrunctVoigt <- R6::R6Class(
     #' Calculate Q and it's gradient.
     #'
     Q_with_gradient = function(x, rf, pos, gwidth, lwidth) {
-      if (all(private$last_Q_signature == c(pos, gwidth, lwidth))) {
-        return(list(grad = private$last_Q_gradient, Q = private$last_Q))
+      if (all(private$cache_last_Q_signature == c(pos, gwidth, lwidth))) {
+        return(list(grad = private$cache_last_Q_gradient, Q = private$cache_last_Q))
       }
       # forward
       n <- (gwidth * sqrt(2)) # 10 dn <-  sqrt(2)*gwidth %*% dgwidth
@@ -162,10 +175,10 @@ ComponentTrunctVoigt <- R6::R6Class(
       private$set_dintegrate(x)
 
       # backwards
-      drdq <- private$dintegrate # 1
+      drdq <- private$cache_dintegrate # 1
       drdb <- drdq * rf / b # 2
       drdo <- sum(drdb * (-b / o)) # 3
-      drdf <- drdb / o + drdo * private$dintegrate # 3 + 4
+      drdf <- drdb / o + drdo * private$cache_dintegrate # 3 + 4
       drdRw <- drdf / (n * sqrt(pi)) # 5
       drdzr <- drdRw * (-2) * Re(zw) # 7
       drdzi <- drdRw * 2 * (Im(zw) - 1 / sqrt(pi)) # 7
@@ -179,19 +192,19 @@ ComponentTrunctVoigt <- R6::R6Class(
       gradient <- c(drdpos, drdgwidth, drdlwidth)
 
       # cache last call
-      private$last_Q_gradient <- gradient
-      private$last_Q <- r
-      private$last_Q_signature <- c(pos, gwidth, lwidth)
+      private$cache_last_Q_gradient <- gradient
+      private$cache_last_Q <- r
+      private$cache_last_Q_signature <- c(pos, gwidth, lwidth)
       private$Q_calls <- private$Q_calls + 1
 
       return(list(grad = gradient, Q = r))
     },
 
-    #' Guess pos, gwidth, lwidth by fitting a pseudo voigt.
+    #' Guess pos, gwidth, lwidth by fitting a pseudo voigt. To be treated as a blackbox.
     #'
     guess = function(x, y) {
-      #############################
-      max_guess_width <- diff(range(x))/4
+      windowsize <- 5
+      max_guess_width <- diff(range(x)) / 4
       #############################
 
       l2loss <- function(x, y, est, csigma, cmean) {
@@ -231,14 +244,17 @@ ComponentTrunctVoigt <- R6::R6Class(
       }
 
       # fit quadratic model to the max and thus get a estimate for mean of pseudo voigt
-      maskcenter <- min(max(which.max(y), private$windowsize + 1), length(y) - private$windowsize)
-      mask <- seq(maskcenter - private$windowsize, maskcenter + private$windowsize)
-      coef <- lm(y[mask] ~ poly(x[mask], 2, raw = TRUE))$coef
-      mean <- min(max((-coef[[2]] / 2 / coef[[3]]), range(x)[1]), range(x)[2])
+      maskcenter <- min(max(which.max(y), windowsize + 1), length(y) - windowsize)
+      mask <- seq(maskcenter - windowsize, maskcenter + windowsize)
+
+      scale <- 1 / diff(range(x[mask]))
+      offset <- min(x[mask])
+      coef <- lm(y[mask] ~ poly((x[mask] - offset) * scale, 2, raw = TRUE))$coef
+      mean <- min(max((-coef[[2]] / 2 / coef[[3]]) * scale + offset, range(x)[1]), range(x)[2])
 
       # incase quadratic fit fails fit simply take max
       r <- range(x[mask])
-      if (!(mean >= r[1] && mean <= r[2])) {
+      if (!is.finite(mean) || !(mean >= r[1] && mean <= r[2])) {
         mean <- x[which.max(y)]
       }
 
@@ -266,8 +282,8 @@ ComponentTrunctVoigt <- R6::R6Class(
       }, c(0, 1))$root
       c(
         pos = mean,
-        gwidth = ufg * sigma,
-        lwidth = ufl * sigma
+        gwidth = max(ufg * sigma, private$min_width),
+        lwidth = max(ufl * sigma, private$min_width)
       )
     }
   )

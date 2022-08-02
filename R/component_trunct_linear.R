@@ -5,7 +5,7 @@
 #' @description
 #' Component which models a linear background a x + b.
 #'
-#' @export
+#' @keywords internal
 ComponentTrunctLinear <- R6::R6Class(
   "ComponentTrunctLinear",
   inherit = AbstractComponent,
@@ -31,7 +31,7 @@ ComponentTrunctLinear <- R6::R6Class(
     #'
     #' @param x a vector of points at which the density is evaluated.
     density = function(x) {
-      fx <- pmax(0, sin(private$angle) * x + cos(private$angle) )
+      fx <- pmax(0, sin(private$angle) * x + cos(private$angle))
       ftrunct <- fx / integrate(x, fx)
       return(ftrunct)
     },
@@ -44,9 +44,9 @@ ComponentTrunctLinear <- R6::R6Class(
     fit = function(x, rf) {
       r <- range(x)
       # restrict range of angle such that sin(angle)*xrange+cos(angle) >= 0
-      angle_range <-c( # kind of complicated
-        if (max(r) >= 0) atan2(-1/max(r),1) else atan2(1/max(r),-1),
-        if (min(r) >= 0) atan2(1/min(r),-1) else atan2(-1/min(r),1)
+      angle_range <- c( # kind of complicated
+        if (max(r) >= 0) atan2(-1 / max(r), 1) else atan2(1 / max(r), -1),
+        if (min(r) >= 0) atan2(1 / min(r), -1) else atan2(-1 / min(r), 1)
       )
 
       FUN <- function(angle) {
@@ -57,7 +57,7 @@ ComponentTrunctLinear <- R6::R6Class(
 
       private$angle <- optimize(FUN, angle_range, maximum = TRUE, tol = private$tol)$maximum
 
-      fx <- pmax(0, sin(private$angle) * x + cos(private$angle) )
+      fx <- pmax(0, sin(private$angle) * x + cos(private$angle))
       norm <- integrate(x, fx)
       self$a <- sin(private$angle) / norm * self$pi
       self$b <- cos(private$angle) / norm * self$pi
@@ -74,7 +74,7 @@ ComponentTrunctLinear <- R6::R6Class(
     }
   ),
   private = list(
-    tol = 1e-16,
+    tol = 1e-16, # tolerance of fit
     angle = NULL,
     rescale_a_b = function(new_pi) {
       self$a <- self$a * new_pi / self$pi

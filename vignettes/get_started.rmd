@@ -1,0 +1,139 @@
+---
+title: "Get started"
+author: "Jan Meißner"
+output:
+  rmarkdown::html_vignette:
+    fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+fig_width: 6
+fig_height: 12
+---
+<!-- Add fullscreen to plotly -->
+<script type="text/javascript">
+  function jump_header(key){
+    $(':header:contains('+key+')')[0].scrollIntoView();
+  }
+
+  function jump_marked(key){
+    $('#' + key)[0].scrollIntoView();
+  }
+
+  function plotZoom(el){
+      if(document.fullscreen) {
+        document.exitFullscreen()
+      } else {
+        $(el).closest('.js-plotly-plot')[0].requestFullscreen();
+      }
+  }
+
+  $( document ).ready(function() {
+    $(".modebar-btn.plotlyjsicon.modebar-btn--logo").replaceWith(
+    `
+    <a rel="tooltip" onclick=plotZoom(this) class="modebar-btn fullscreen-btn" data-title="Full Screen" data-attr="zoom" data-val="auto" data-toggle="false" data-gravity="n" >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="icon" height="1em" width="1em">
+        <!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+        <path d="M128 32H32C14.31 32 0 46.31 0 64v96c0 17.69 14.31 32 32 32s32-14.31 32-32V96h64c17.69 0 32-14.31 32-32S145.7 32 128 32zM416 32h-96c-17.69 0-32 14.31-32 32s14.31 32 32 32h64v64c0 17.69 14.31 32 32 32s32-14.31 32-32V64C448 46.31 433.7 32 416 32zM128 416H64v-64c0-17.69-14.31-32-32-32s-32 14.31-32 32v96c0 17.69 14.31 32 32 32h96c17.69 0 32-14.31 32-32S145.7 416 128 416zM416 320c-17.69 0-32 14.31-32 32v64h-64c-17.69 0-32 14.31-32 32s14.31 32 32 32h96c17.69 0 32-14.31 32-32v-96C448 334.3 433.7 320 416 320z"/>
+      </svg>
+    </a>
+    `);
+  });
+</script>
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+set.seed(1234)
+```
+The R package **spectralem** uses a EM algorithm <paperref> to fit a model of Voigt profiles to a signal:
+$$
+f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f_i(x)
+$$
+Here $\beta_j > 0$ are the amplitudes of the Voigt profiles $V$ where $\theta_j$ represents the position,
+Gaussian and Lorentzian width of the voigt profile. Additionally, it is possible to fit arbitrary positive background functions \eqn{f_i(x) > 0}, these are by default zero.
+Their amplitudes are constrained to $\alpha_i > 0$.
+
+The algorithm is fast and even for 30 peaks takes only roughly a minute to fit.
+
+## General Usage
+
+```{r, fig.width=8, fig.height=4}
+library(spectralem)
+
+data <- synthetic.signal(seed = 1, K = 30, noise = 0.005)
+x <- data$x
+y <- data$y
+
+res <- spectralem(x, y, K = 30, print_progress = FALSE) # no progress bar for rmd
+
+# get position of fitted peaks
+res$fit_params$pos
+
+fit <- voigt.model(x, res$fit_params)
+# or alternatively fit <- res$fit
+
+
+# plot the fit
+library(plotly)
+fig <- plotly::plot_ly(x = x, y = y, name = 'true', type = 'scatter', mode = 'lines')
+fig <- fig %>% plotly::add_lines(y = fit, name = 'fit', type = 'scatter', mode = 'lines')
+fig
+```
+## Passing optional start parameters
+
+Can be done by passing the additional list 'start_peaks'.
+```{r fig.width=8, fig.height=4}
+data <- synthetic.signal(1212, 4, 0.001)
+
+res <- spectralem(
+  data$x, data$y,
+  K = 4,
+  start_peaks = list(
+    pos = c(465, 644, 828, 862),
+    gwidth = c(5, 5, 5, 5),
+    lwidth = c(0.1, 0.1, 0.1, 0.1)
+  ),
+  print_progress = FALSE # no progress bar for rmd
+)
+
+# plot the fit
+library(plotly)
+fig <- plotly::plot_ly(x = data$x, y = data$y, name = 'true', type = 'scatter', mode = 'lines')
+fig <- fig %>% plotly::add_lines(y = res$fit, name = 'fit', type = 'scatter', mode = 'lines')
+fig
+```
+## Using BSplines as a background model
+
+Using 'background_model' any fixed background signal can be added. It is not advised to set 'linear = FALSE'.
+```{r fig.width=8, fig.height=4}
+data <- synthetic.signal(seed = 312, K = 4, noise = 0.005)
+x <- data$x
+y <- data$y
+
+# add spline background to data
+library(splines2)
+bsMat <- bSpline(x, df=3)
+f1 <- c(bsMat[, 1])
+f2 <- c(bsMat[, 2])
+f3 <- c(bsMat[, 3])
+y <- y + 0.4*f1 + 0.04*f2 + 0.2*f3
+
+# fit
+res <- spectralem(x, y, K = 4, background_model = list(linear=TRUE, f1, f2, f3), print_progress = FALSE)
+
+# voigt.model does not support non linear background; add them manually
+alpha <- res$fit_params$background_amps
+fit <- voigt.model(x, res$fit_params) + f1 * alpha[1] + f2 * alpha[2] + f3 * alpha[3]
+# or alternatively fit <- res$fit
+
+# plot the fit
+library(plotly)
+fig <- plotly::plot_ly(x = x, y = y, name = 'true', type = 'scatter', mode = 'lines')
+fig <- fig %>% plotly::add_lines(y = fit, name = 'fit', type = 'scatter', mode = 'lines')
+fig
+```

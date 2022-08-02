@@ -2,15 +2,16 @@
 % Please edit documentation in R/integrate.R
 \name{integrate}
 \alias{integrate}
-\title{Compute the area of a function with values 'y' at the points 'x'.}
+\title{Compute the area of a function with values \code{y} at the points \code{x}.}
 \usage{
 integrate(x, y)
 }
 \arguments{
-\item{x}{coordinates of points on the x-axis}
+\item{x}{coordinates of points on the \code{x}-axis}
 
 \item{y}{coordinates of function values}
 }
 \description{
 Wrapper function for trapezoidal integration from pracma.
 }
+\keyword{internal}

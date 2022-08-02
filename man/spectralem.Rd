@@ -2,41 +2,93 @@
 % Please edit documentation in R/em_algorithm.R
 \name{spectralem}
 \alias{spectralem}
-\title{Quickly fits voigt profiles to a signal.}
+\title{Robust, fast and fully automated peak fitting of Voigt profiles to spectral data}
 \usage{
 spectralem(
   x,
   y,
-  max_peaks,
-  max_iter,
-  print_progress = TRUE,
-  add_component_every_iters = 10,
+  K,
   start_peaks = list(pos = c(), gwidth = c(), lwidth = c()),
-  background_model = list(ComponentTrunctLinear$new()),
-  placement_strategy = StrategyMaxSmoothLossfield$new()
+  background_model = list(linear = TRUE),
+  typical_width = diff(range(x))/100/2,
+  add_component_every_iters = 10,
+  max_iter = add_component_every_iters * (K + 2 + ceiling(K/2)),
+  min_width = 1e-06 * mean(diff(x)),
+  possible_peak_positions = range(x),
+  print_progress = TRUE
 )
 }
 \arguments{
-\item{x}{the x coordinates of the Raman signal}
+\item{x}{the \code{x} coordinates of the signal}
 
-\item{y}{the function values of the function to be fit evaluated at the x coordinates}
+\item{y}{the function values of the function to be fit evaluated at the \code{x} coordinates}
 
-\item{max_peaks}{the maximal number of components to fit}
+\item{K}{the number of peaks to fit}
+
+\item{start_peaks}{optional initial peak parameters; list see examples}
+
+\item{background_model}{defines the background model}
+
+\item{typical_width}{typical width of a voigt profile in the signal}
+
+\item{add_component_every_iters}{number of iterations to perform until a new peak is added}
 
 \item{max_iter}{the maximal number of iterations}
 
-\item{print_progress}{(Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.}
+\item{min_width}{minimal gaussian and lorentzian width}
 
-\item{add_component_every_iters}{How many iteration to perform until a new peak is added. For all peaks to spawn max_iter >= (2+max_peaks) * add_component_every_iters needs to be satisfied.}
+\item{possible_peak_positions}{allowed range of positions for fitted peaks, can be increased to fit cut off peaks}
 
-\item{start_peaks}{initial peak parameters allows user to pass know peaks. list of vectors}
-
-\item{background_model}{defines the background model, support BSplines and a linear background. Instance of class which implements AbstractComponent.}
-
-\item{placement_strategy}{(Optional) Defines strategy used to place/birth new peak. Instance of class which implements AbstractStrategy.}
+\item{print_progress}{whether to print a progress bar}
+}
+\value{
+A list with components:
+\itemize{
+  \item fit_params - A list which contains named components \code{amp}, \code{pos}, \code{gwidth} and \code{lwidth} which are vectors of the same length.
+                     For each the i-th entry yields the parameters of the i-th Voigt profile.
+                     Further named components of the list \code{a} and \code{b} describe the slope and offset of the linear background respectively.
+                     If \eqn{f_i(x)} are specified also contains a vector \code{background_amps} representing \eqn{\alpha_i}
+  \item fit - A vector containing the function values of the fitted function evaluated at \code{x}.
+}
 }
 \description{
-Requires no starting fit.
-Most useful to get a fast and decent fit.
-The algorithm was developed to produce a fast and decent fit that general non linear optimizers such as optim fail to produce.
+Implements the algorithm as discussed in <paperedoi>. The model fitted is defined as:
+\deqn{f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f_i(x)}
+Here \eqn{\beta_j > 0} are the amplitudes of the Voigt profiles \eqn{V} where \eqn{\theta_j} represents the position (\code{pos}),
+Gaussian (\code{gwidth}) and Lorentzian (\code{lwidth}) width of the voigt profile. It requires no starting parameters, but optionally some can be passed in \code{start_peaks}.
+
+The most impactful hyperparameters are \code{typical_width} and \code{add_component_every_iters}.
+The former should be a bit smaller than the typical width of Voigt profiles in the signal. If chosen too big or too small the fit will be usually suboptimal.
+The hyperparameter \code{add_component_every_iters} defines the number of iterations to perform until a new peak is added.
+Setting it to a bigger value comes at a greater computational cost but usually results in a better fit.
+The hyperparameter \code{max_iter} defines the total number of iterations, impact is similar but usually weaker than \code{add_component_every_iters}.
+
+Additionally, it is possible to fit arbitrary positive background functions \eqn{f_i(x) > 0}, these are by default zero.
+Note that \eqn{\alpha_i > 0} must hold. BSplines could be used here.
+
+Implementation uses voigt profiles as defined by 'RcppFaddeeva::Voigt()'.
+}
+\examples{
+\dontrun{
+res <- spectralem(
+  x, y,
+  K = 4,
+)
+
+res <- spectralem(
+  x, y,
+  K = 4,
+  start_peaks = list(
+    pos = c(332, 577, 697),
+    gwidth = c(5, 5, 5),
+    lwidth = c(0.1, 0.1, 0.1)
+  )
+)
+
+res <- spectralem(
+  x, y,
+  K = 4,
+  background_model = list(linear = TRUE, f1, f2, f3)
+)
+}
 }

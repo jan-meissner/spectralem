@@ -7,6 +7,7 @@
 Component which models a truncated voigt profile. Models a voigt peak in the signal.
 Truncation is needed to deal with peaks which have significant mass outside the x range.
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[spectralem:AbstractComponent]{spectralem::AbstractComponent}} -> \code{ComponentTrunctVoigt}
 }
@@ -48,15 +49,17 @@ Truncation is needed to deal with peaks which have significant mass outside the 
 \subsection{Method \code{new()}}{
 Initialize the voigt component.
 \subsection{Usage}{
-\if{html}{\out{<div class="r">}}\preformatted{ComponentTrunctVoigt$new(pi = 1, min_width = 1e-08)}\if{html}{\out{</div>}}
+\if{html}{\out{<div class="r">}}\preformatted{ComponentTrunctVoigt$new(min_width, possible_peak_positions, pi = 1)}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{pi}}{initial value for pi.}
-
 \item{\code{min_width}}{minimal value for lwidth and gwidth}
+
+\item{\code{possible_peak_positions}}{range of possible peak positions}
+
+\item{\code{pi}}{initial value for pi.}
 }
 \if{html}{\out{</div>}}
 }
@@ -127,7 +130,7 @@ Gets amplitude of the voigt profile.
 
 Calculate Q and it's gradient.
 
-Guess pos, gwidth, lwidth by fitting a pseudo voigt.
+Guess pos, gwidth, lwidth by fitting a pseudo voigt. To be treated as a blackbox.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{ComponentTrunctVoigt$get_amp()}\if{html}{\out{</div>}}
 }

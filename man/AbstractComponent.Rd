@@ -7,6 +7,7 @@
 AbstractComponent is the abstract base class for components.
 All subclasses must implement fit and density.
 }
+\keyword{internal}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{

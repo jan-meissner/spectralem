@@ -9,17 +9,20 @@ Places a new Voigt peak where the lossfield is maximal.
 \details{
 Max Smoothed Lossfield Placement Strategy
 }
+\keyword{internal}
 \section{Super class}{
 \code{\link[spectralem:AbstractStrategy]{spectralem::AbstractStrategy}} -> \code{StrategyMaxSmoothLossfield}
 }
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
-\item{\code{init_gauss_std}}{initial gwidth of the .}
+\item{\code{typical_width}}{typical width of peaks, used as the width of the blur kernel and for the gwidth of the newly placed peak}
 
-\item{\code{blur_sig}}{radius of gaussian smoothing kernel applied to the loss.}
+\item{\code{min_width}}{minimal width of a placed peak}
 
-\item{\code{burn_in_iters}}{number of iterations to perform with fixed densities.}
+\item{\code{burn_in_iters}}{number of iterations to perform with fixed densities}
+
+\item{\code{possible_peak_positions}}{range of possible peak positions}
 }
 \if{html}{\out{</div>}}
 }
@@ -38,20 +41,23 @@ Max Smoothed Lossfield Placement Strategy
 Initialize the strategy.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{StrategyMaxSmoothLossfield$new(
-  init_gauss_std = 5,
-  blur_sig = 5,
-  burn_in_iters = 20
+  min_width,
+  typical_width,
+  burn_in_iters,
+  possible_peak_positions
 )}\if{html}{\out{</div>}}
 }
 
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{init_gauss_std}}{initial gwidth of the .}
+\item{\code{min_width}}{minimal gwidth and lwidth for the newly placed peak}
 
-\item{\code{blur_sig}}{radius of gaussian smoothing kernel applied to the loss.}
+\item{\code{typical_width}}{typical width of peaks, used as the width of the blur kernel and for the gwidth of the newly placed peak}
 
 \item{\code{burn_in_iters}}{number of iterations to perform with fixed densities.}
+
+\item{\code{possible_peak_positions}}{range of possible peak positions}
 }
 \if{html}{\out{</div>}}
 }

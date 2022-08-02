@@ -6,7 +6,7 @@
 #' AbstractComponent is the abstract base class for components.
 #' All subclasses must implement fit and density.
 #'
-#' @export
+#' @keywords internal
 AbstractComponent <- R6::R6Class(
   "AbstractComponent",
   public = list(
@@ -70,7 +70,7 @@ AbstractComponent <- R6::R6Class(
       ComponentFixedDensity$new(self$density(x))$set_pi(self$pi)
     }
   ),
-  list(
+  private = list(
     Q_calls = 0
   )
 )

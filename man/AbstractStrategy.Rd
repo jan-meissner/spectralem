@@ -7,6 +7,7 @@
 AbstractStrategy is the abstract base class peak placement for strategies.
 All subclasses must implement place_new_peak.
 }
+\keyword{internal}
 \section{Methods}{
 \subsection{Public methods}{
 \itemize{
