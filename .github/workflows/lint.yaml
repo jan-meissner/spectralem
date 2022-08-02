@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: |
           Rscript -e "install.packages(c('remotes', 'rcmdcheck'))" -e "remotes::install_deps(dependencies = TRUE)"
-          Rscript -e "install.packages(c('styler'))"
+          Rscript -e "install.packages(c('styler', 'roxygen2'))"
       - name: Lint
         run: styler::style_pkg(filetype = c(".R", ".Rmd", ".Rmarkdown", ".Rnw"))
         shell: Rscript {0}
