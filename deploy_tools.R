@@ -1,14 +1,12 @@
-# Based off https://github.com/mlverse/torch
-# document
 library(roxygen2)
 library(devtools)
 
+# document
 devtools::document()
 devtools::build_manual()
 
 # stylr
 library(styler)
-styler::style_pkg()
 styler::style_pkg(filetype = c(".R", ".Rmd", ".Rmarkdown", ".Rnw"))
 
 # update R
@@ -21,10 +19,6 @@ install.packages("RcppFaddeeva")
 library(remotes)
 remotes::install_version("RcppFaddeeva", "0.2.2")
 
-# building
-devtools::build()
-#https://builder.r-hub.io/
-
 #coverage
 cov <- devtools::test_coverage()
 covr::report(
@@ -35,9 +29,8 @@ covr::report(
 
 devtools::run_examples()
 
-use_github_action_check_standard(save_as = "R-CMD-check.yaml")
-
-
+# building
+devtools::build()
 #devtools::release()
 
 

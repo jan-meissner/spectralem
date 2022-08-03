@@ -4,9 +4,7 @@
 # spectralem
 
 [![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml)
-[![lint](https://github.com/jan-meissner/spectralem/actions/workflows/lint.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/lint.yaml)
-[![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/pkgdown.yaml)
-[![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/test-coverage.yaml)
+[![codecov](https://codecov.io/github/jan-meissner/spectralem/branch/master/graphs/badge.svg)](https://app.codecov.io/gh/jan-meissner/spectralem/commits?branch=master)
 
 ## Installation
 
@@ -46,7 +44,8 @@ library(ggplot2)
 pd <- data.frame(x = x, y = y, fit = voigt.model(x, res$fit_params))
 ggplot(pd, aes(x)) +
   geom_line(aes(y = y, colour = "y")) +
-  geom_line(aes(y = fit, colour = "fit")) + theme_bw()
+  geom_line(aes(y = fit, colour = "fit")) +
+  theme_bw()
 ```
 
 <img src="man/figures/README-unnamed-chunk-2-1.svg" width="100%" />
