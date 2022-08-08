@@ -39,14 +39,14 @@ The algorithm takes roughly a minute to fit 30 peaks.
 plot_helper <- function(x, y, fit){
   #library(svglite)
   #library(htmltools)
-  library(ggplot2)
-  pd <- data.frame(x = x, y = y, fit = fit)
-  #svg_plot <- svglite::svgstring()
-  #htmltools::HTML(svg_plot())
-  ggplot(pd, aes(x)) +
-    geom_line(aes(y = y, colour = "y")) +
-    geom_line(aes(y = fit, colour = "fit")) +
-    theme_bw()
+  #library(ggplot2)
+  #pd <- data.frame(x = x, y = y, fit = fit)
+  ##svg_plot <- svglite::svgstring()
+  ##htmltools::HTML(svg_plot())
+  #ggplot(pd, aes(x)) +
+  #  geom_line(aes(y = y, colour = "y")) +
+  #  geom_line(aes(y = fit, colour = "fit")) +
+  #  theme_bw()
   1
 }
 ```
