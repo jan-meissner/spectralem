@@ -31,3 +31,40 @@ Here $\beta_j > 0$ are the amplitudes of the Voigt profiles $V$ where $\theta_j$
 Gaussian and Lorentzian width of it. Additionally, it is possible to fit arbitrary positive background functions \eqn{f_i(x) > 0}, these are by default zero.
 Their amplitudes are constrained to $\alpha_i > 0$.
 
+The algorithm takes roughly a minute to fit 30 peaks.
+
+## General Usage
+```{r, include = FALSE}
+# helper function for plotting
+plot_helper <- function(x, y, fit){
+  #library(svglite)
+  #library(htmltools)
+  library(ggplot2)
+  pd <- data.frame(x = x, y = y, fit = fit)
+  #svg_plot <- svglite::svgstring()
+  #htmltools::HTML(svg_plot())
+  ggplot(pd, aes(x)) +
+    geom_line(aes(y = y, colour = "y")) +
+    geom_line(aes(y = fit, colour = "fit")) +
+    theme_bw()
+  1
+}
+```
+```{r, fig.width=8, fig.height=4}
+library(spectralem)
+
+data <- synthetic.signal(seed = 1, K = 30, noise = 0.005)
+x <- data$x
+y <- data$y
+
+res <- spectralem(x, y, K = 3, print_progress = FALSE) # no progress bar for vignettes
+
+# get position of fitted peaks
+res$fit_params$pos
+
+fit <- voigt.model(x, res$fit_params)
+# or alternatively fit <- res$fit
+
+# plot the fit using a helper function defined in the appendix
+plot_helper(x, y, fit)
+```
