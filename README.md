@@ -5,7 +5,6 @@
 
 [![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/github/jan-meissner/spectralem/branch/main/graphs/badge.svg)](https://app.codecov.io/gh/jan-meissner/spectralem/commits?branch=main)
-A robust and fast EM algorithm to fit Voigt peaks to spectral data.
 
 ## Installation
 
@@ -22,6 +21,8 @@ remotes::install_github("jan-meissner/spectralem")
 ```
 
 ## Examples
+
+Fit Voigt profiles to some signal defined by `x` and `y`.
 
 ``` r
 library(spectralem)
