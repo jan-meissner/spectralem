@@ -11,7 +11,7 @@
 If `RcppFaddeeva` is not available for the current R version use:
 
 ``` r
-remotes::install_version("RcppFaddeeva", "0.2.2")
+remotes::install_github("cran/RcppFaddeeva")
 ```
 
 You can install the development version with:
