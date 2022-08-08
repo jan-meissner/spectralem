@@ -32,7 +32,7 @@ Their amplitudes are constrained to $\alpha_i > 0$.
 The algorithm takes roughly a minute to fit 30 peaks.
 
 ## General Usage
-```{r, fig.width=8, fig.height=4, dev = 'svg'}
+```{r, fig.width=8, fig.height=4}
 library(spectralem)
 
 data <- synthetic.signal(seed = 1, K = 30, noise = 0.005)
