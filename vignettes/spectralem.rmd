@@ -48,7 +48,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
   out.width = "100%",
-  dev = "svg" # set output device to svg
+  dev = "svglite" # set output device to svg
 )
 set.seed(1234)
 ```
@@ -148,11 +148,15 @@ plot_helper(x, y, res$fit)
 ```{r}
 # helper function for plotting
 plot_helper <- function(x, y, fit){
+  library(svglite)
+  library(htmltools)
   library(ggplot2)
   pd <- data.frame(x = x, y = y, fit = fit)
+  s <- svgstring()
   ggplot(pd, aes(x)) +
     geom_line(aes(y = y, colour = "y")) +
     geom_line(aes(y = fit, colour = "fit")) +
     theme_bw()
+  htmltools::HTML(s())
 }
 ```
