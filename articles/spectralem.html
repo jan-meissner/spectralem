@@ -91,14 +91,87 @@ f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">y</span></span>
 <span></span>
-<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectralem.html">spectralem</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, K <span class="op">=</span> <span class="fl">3</span>, print_progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># no progress bar for vignettes</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectralem.html">spectralem</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, K <span class="op">=</span> <span class="fl">30</span>, print_progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># no progress bar for vignettes</span></span>
 <span></span>
 <span><span class="co"># get position of fitted peaks</span></span>
 <span><span class="va">res</span><span class="op">$</span><span class="va">fit_params</span><span class="op">$</span><span class="va">pos</span></span>
-<span><span class="co">#&gt; [1] 672.0877 503.4254 326.0592</span></span>
+<span><span class="co">#&gt;  [1] 670.9707 503.2656 300.2834 274.9292 801.6447 251.4052 706.4714 411.1247</span></span>
+<span><span class="co">#&gt;  [9] 770.3988 354.3531 187.4783 550.1228 326.5966 313.7704 854.5285 726.4122</span></span>
+<span><span class="co">#&gt; [17] 772.4744 572.6367 688.3358 502.0227 516.6996 203.3263 809.3393 252.8646</span></span>
+<span><span class="co">#&gt; [25] 238.9032 305.9471 549.7953 188.2852 180.1685 314.6850</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/voigt.model.html">voigt.model</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">res</span><span class="op">$</span><span class="va">fit_params</span><span class="op">)</span></span>
-<span><span class="co"># or alternatively fit &lt;- res$fit</span></span></code></pre></div>
+<span><span class="co"># or alternatively fit &lt;- res$fit</span></span>
+<span></span>
+<span><span class="co"># plot the fit using a helper function defined in the appendix</span></span>
+<span><span class="fu">plot_helper</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p><img src="spectralem_files/figure-html/unnamed-chunk-2-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="passing-optional-start-parameters">Passing optional Start Parameters<a class="anchor" aria-label="anchor" href="#passing-optional-start-parameters"></a>
+</h2>
+<p>Can be done by passing the additional list ‘start_peaks’.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synthetic.signal.html">synthetic.signal</a></span><span class="op">(</span><span class="fl">1212</span>, <span class="fl">4</span>, <span class="fl">0.001</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectralem.html">spectralem</a></span><span class="op">(</span></span>
+<span>  <span class="va">data</span><span class="op">$</span><span class="va">x</span>, <span class="va">data</span><span class="op">$</span><span class="va">y</span>,</span>
+<span>  K <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  start_peaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    pos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">465</span>, <span class="fl">644</span>, <span class="fl">828</span>, <span class="fl">862</span><span class="op">)</span>,</span>
+<span>    gwidth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>    lwidth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  print_progress <span class="op">=</span> <span class="cn">FALSE</span> <span class="co"># no progress bar for vignettes</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># plot the fit</span></span>
+<span><span class="fu">plot_helper</span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">x</span>, <span class="va">data</span><span class="op">$</span><span class="va">y</span>, <span class="va">res</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p><img src="spectralem_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="using-bsplines-as-a-background-model">Using BSplines as a Background Model<a class="anchor" aria-label="anchor" href="#using-bsplines-as-a-background-model"></a>
+</h2>
+<p>Using ‘background_model’ any fixed background signal can be added. It is not advised to set ‘linear = FALSE’.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synthetic.signal.html">synthetic.signal</a></span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">312</span>, K <span class="op">=</span> <span class="fl">4</span>, noise <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">y</span></span>
+<span></span>
+<span><span class="co"># add spline background to data</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wwenjie.org/splines2" class="external-link">splines2</a></span><span class="op">)</span></span>
+<span><span class="va">bsMat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://wwenjie.org/splines2/reference/bSpline.html" class="external-link">bSpline</a></span><span class="op">(</span><span class="va">x</span>, df <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bsMat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bsMat</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">f3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">bsMat</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">y</span> <span class="op">+</span> <span class="fl">0.4</span> <span class="op">*</span> <span class="va">f1</span> <span class="op">+</span> <span class="fl">0.04</span> <span class="op">*</span> <span class="va">f2</span> <span class="op">+</span> <span class="fl">0.2</span> <span class="op">*</span> <span class="va">f3</span></span>
+<span></span>
+<span><span class="co"># fit</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectralem.html">spectralem</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, K <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>                  background_model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>linear <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">f1</span>, <span class="va">f2</span>, <span class="va">f3</span><span class="op">)</span>, print_progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># voigt.model does not support non linear background; add them manually</span></span>
+<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">fit_params</span><span class="op">$</span><span class="va">background_amps</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/voigt.model.html">voigt.model</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">res</span><span class="op">$</span><span class="va">fit_params</span><span class="op">)</span> <span class="op">+</span> <span class="va">f1</span> <span class="op">*</span> <span class="va">alpha</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="va">f2</span> <span class="op">*</span> <span class="va">alpha</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="va">f3</span> <span class="op">*</span> <span class="va">alpha</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span>
+<span><span class="co"># or alternatively fit &lt;- res$fit</span></span>
+<span></span>
+<span><span class="co"># plot the fit</span></span>
+<span><span class="fu">plot_helper</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">res</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
+<p><img src="spectralem_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
+</div>
+<div class="section level2">
+<h2 id="plotting-helper-function">Plotting Helper Function<a class="anchor" aria-label="anchor" href="#plotting-helper-function"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># helper function for plotting</span></span>
+<span><span class="va">plot_helper</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">fit</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span>  <span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, fit <span class="op">=</span> <span class="va">fit</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">pd</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">y</span>, colour <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">fit</span>, colour <span class="op">=</span> <span class="st">"fit"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
