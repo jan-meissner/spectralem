@@ -5,9 +5,9 @@ Version: 0.9
 Authors@R: c(
     person("Jan", "Meißner", email = "philipp.meissner@rwth-aachen.de", role = c("aut", "cre"))
     )
-Description: Implements the algorithm describe in <paper doi>. The algorithm is designed to fit Voigt profiles to signals gathered from Raman Spectroscopy.
-             By default a linear function is used to fit the background if needed it can be extended with BSplines or any other set of fixed positive functions.
+Description: Implements the algorithm describe in <paper doi>. The algorithm is designed to fit Voigt profiles to signals from Raman Spectroscopy.
              Parameter initialization is not required, but can be optionally added. The algorithm can fit 30 peaks in roughly a minute.
+             By default a linear function is used to fit the background if needed it can be extended with BSplines or any other set of fixed positive functions.
 License: MIT + file LICENSE
 URL: https://github.com/jan-meissner/spectralem
 BugReports: https://github.com/jan-meissner/spectralem/issues
