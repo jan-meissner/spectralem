@@ -48,7 +48,9 @@ StrategyMaxSmoothLossfield <- R6::R6Class(
     place_new_peak = function(x, p_y, components) {
       # no other components
       if (length(components) == 0) {
-        return(list(private$get_voigt_at_pos(x[which.max(p_y)], 1)))
+        new_comp <- list(private$get_voigt_at_pos(x[which.max(p_y)], 1))
+        comps <- private$optimize_new_component_parameters(x, p_y, list(), new_comp)
+        return(comps)
       }
 
       smooth_lossfield_int_cor <- private$get_smoothed_lossfield(x, p_y, components)

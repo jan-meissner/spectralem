@@ -46,7 +46,9 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
+  out.width = "100%",
+  dev = "svg" # set output device to svg
 )
 set.seed(1234)
 ```
@@ -55,13 +57,23 @@ $$
 f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f_i(x)
 $$
 Here $\beta_j > 0$ are the amplitudes of the Voigt profiles $V$ where $\theta_j$ represents the position,
-Gaussian and Lorentzian width of the voigt profile. Additionally, it is possible to fit arbitrary positive background functions \eqn{f_i(x) > 0}, these are by default zero.
+Gaussian and Lorentzian width of it. Additionally, it is possible to fit arbitrary positive background functions \eqn{f_i(x) > 0}, these are by default zero.
 Their amplitudes are constrained to $\alpha_i > 0$.
 
-The algorithm is fast and even for 30 peaks takes only roughly a minute to fit.
+The algorithm takes roughly a minute to fit 30 peaks.
 
 ## General Usage
-
+```{r, include = FALSE}
+# helper function for plotting
+plot_helper <- function(x, y, fit){
+  library(ggplot2)
+  pd <- data.frame(x = x, y = y, fit = fit)
+  ggplot(pd, aes(x)) +
+    geom_line(aes(y = y, colour = "y")) +
+    geom_line(aes(y = fit, colour = "fit")) +
+    theme_bw()
+}
+```
 ```{r, fig.width=8, fig.height=4}
 library(spectralem)
 
@@ -69,7 +81,7 @@ data <- synthetic.signal(seed = 1, K = 30, noise = 0.005)
 x <- data$x
 y <- data$y
 
-res <- spectralem(x, y, K = 30, print_progress = FALSE) # no progress bar for rmd
+res <- spectralem(x, y, K = 30, print_progress = FALSE) # no progress bar for vignettes
 
 # get position of fitted peaks
 res$fit_params$pos
@@ -77,17 +89,14 @@ res$fit_params$pos
 fit <- voigt.model(x, res$fit_params)
 # or alternatively fit <- res$fit
 
-
-# plot the fit
-library(plotly)
-fig <- plotly::plot_ly(x = x, y = y, name = "true", type = "scatter", mode = "lines")
-fig <- fig %>% plotly::add_lines(y = fit, name = "fit", type = "scatter", mode = "lines")
-fig
+# plot the fit using a helper function defined in the appendix
+plot_helper(x, y, fit)
 ```
-## Passing optional start parameters
+
+## Passing optional Start Parameters
 
 Can be done by passing the additional list 'start_peaks'.
-```{r fig.width=8, fig.height=4}
+```{r fig.width=8, fig.height=5}
 data <- synthetic.signal(1212, 4, 0.001)
 
 res <- spectralem(
@@ -98,19 +107,17 @@ res <- spectralem(
     gwidth = c(5, 5, 5, 5),
     lwidth = c(0.1, 0.1, 0.1, 0.1)
   ),
-  print_progress = FALSE # no progress bar for rmd
+  print_progress = FALSE # no progress bar for vignettes
 )
 
 # plot the fit
-library(plotly)
-fig <- plotly::plot_ly(x = data$x, y = data$y, name = "true", type = "scatter", mode = "lines")
-fig <- fig %>% plotly::add_lines(y = res$fit, name = "fit", type = "scatter", mode = "lines")
-fig
+plot_helper(data$x, data$y, res$fit)
 ```
-## Using BSplines as a background model
+
+## Using BSplines as a Background Model
 
 Using 'background_model' any fixed background signal can be added. It is not advised to set 'linear = FALSE'.
-```{r fig.width=8, fig.height=4}
+```{r fig.width=8, fig.height=5}
 data <- synthetic.signal(seed = 312, K = 4, noise = 0.005)
 x <- data$x
 y <- data$y
@@ -124,7 +131,8 @@ f3 <- c(bsMat[, 3])
 y <- y + 0.4 * f1 + 0.04 * f2 + 0.2 * f3
 
 # fit
-res <- spectralem(x, y, K = 4, background_model = list(linear = TRUE, f1, f2, f3), print_progress = FALSE)
+res <- spectralem(x, y, K = 4,
+                  background_model = list(linear = TRUE, f1, f2, f3), print_progress = FALSE)
 
 # voigt.model does not support non linear background; add them manually
 alpha <- res$fit_params$background_amps
@@ -132,8 +140,19 @@ fit <- voigt.model(x, res$fit_params) + f1 * alpha[1] + f2 * alpha[2] + f3 * alp
 # or alternatively fit <- res$fit
 
 # plot the fit
-library(plotly)
-fig <- plotly::plot_ly(x = x, y = y, name = "true", type = "scatter", mode = "lines")
-fig <- fig %>% plotly::add_lines(y = fit, name = "fit", type = "scatter", mode = "lines")
-fig
+plot_helper(x, y, res$fit)
+```
+
+## Plotting Helper Function
+
+```{r}
+# helper function for plotting
+plot_helper <- function(x, y, fit){
+  library(ggplot2)
+  pd <- data.frame(x = x, y = y, fit = fit)
+  ggplot(pd, aes(x)) +
+    geom_line(aes(y = y, colour = "y")) +
+    geom_line(aes(y = fit, colour = "fit")) +
+    theme_bw()
+}
 ```

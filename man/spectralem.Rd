@@ -55,7 +55,7 @@ A list with components:
 Implements the algorithm as discussed in <paperedoi>. The model fitted is defined as:
 \deqn{f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f_i(x)}
 Here \eqn{\beta_j > 0} are the amplitudes of the Voigt profiles \eqn{V} where \eqn{\theta_j} represents the position (\code{pos}),
-Gaussian (\code{gwidth}) and Lorentzian (\code{lwidth}) width of the voigt profile. It requires no starting parameters, but optionally some can be passed in \code{start_peaks}.
+Gaussian (\code{gwidth}) and Lorentzian (\code{lwidth}) width of the Voigt profile. It requires no starting parameters, but optionally some can be passed in \code{start_peaks}.
 
 The most impactful hyperparameters are \code{typical_width} and \code{add_component_every_iters}.
 The former should be a bit smaller than the typical width of Voigt profiles in the signal. If chosen too big or too small the fit will be usually suboptimal.
@@ -66,7 +66,7 @@ The hyperparameter \code{max_iter} defines the total number of iterations, impac
 Additionally, it is possible to fit arbitrary positive background functions \eqn{f_i(x) > 0}, these are by default zero.
 Note that \eqn{\alpha_i > 0} must hold. BSplines could be used here.
 
-Implementation uses voigt profiles as defined by 'RcppFaddeeva::Voigt()'.
+Implementation uses Voigt profiles as defined by 'RcppFaddeeva::Voigt()'.
 }
 \examples{
 \dontrun{

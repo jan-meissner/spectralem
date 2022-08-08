@@ -162,7 +162,7 @@ ComponentTrunctVoigt <- R6::R6Class(
       w <- RcppFaddeeva::Faddeeva_w(zr + 1i * zi) # 7
       Rw <- Re(w) # 7 # dRw <- (2i/sqrt(pi) - 2 * z * w) * (dzr + 1i dzi)
       # dRw <- (- 2) * Re(z * w) %*% dzr + 2 * (Im(z*w) - 1/sqrt(pi)) %*% dzi
-      f <- Rw / n / sqrt(pi) ## 5 # df <- diag(1/(n*sqrt(pi))) %*% Rw - diag(f/(n*sqrt(pi))) %*% dn
+      f <- Rw / n / sqrt(pi) ## 5 # df <- diag(1/(n*sqrt(pi))) %*% Rw - diag(f/(n)) %*% dn
       o <- integrate(x, f) # 4 do = dintegrate %*% df
       b <- f / o # 3 # db = diag(1/o) %*% df - diag(b/o) %*% do
       q <- rf * log(b) # 2 dq = diag(rf/b) %*% db
@@ -184,10 +184,10 @@ ComponentTrunctVoigt <- R6::R6Class(
       drdzi <- drdRw * 2 * (Im(zw) - 1 / sqrt(pi)) # 7
       drdlwidth <- sum(drdzi / n) # 8
       drdpos <- sum(drdzr / (-n)) # 9
-      drdn <- drdf * (-f / (n * sqrt(pi))) +
+      drdn <- sum(drdf * (-f / (n)) +
         drdzi * (-zi / n) +
-        drdzr * (-zr / n) # 5 + 8 + 9
-      drdgwidth <- sum(drdn) * sqrt(2) #
+        drdzr * (-zr / n)) # 5 + 8 + 9
+      drdgwidth <- drdn * sqrt(2) #
 
       gradient <- c(drdpos, drdgwidth, drdlwidth)
 

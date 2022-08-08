@@ -4,7 +4,7 @@
 # spectralem
 
 [![R-CMD-check](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jan-meissner/spectralem/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/github/jan-meissner/spectralem/branch/master/graphs/badge.svg)](https://app.codecov.io/gh/jan-meissner/spectralem/commits?branch=master)
+[![codecov](https://codecov.io/github/jan-meissner/spectralem/branch/main/graphs/badge.svg)](https://app.codecov.io/gh/jan-meissner/spectralem/commits?branch=main)
 
 ## Installation
 
@@ -34,10 +34,10 @@ res <- spectralem(x, y, K = 30)
 
 # get position of fitted peaks
 res$fit_params$pos
-#>  [1] 670.9280 503.8674 325.3267 276.1903 801.7190 706.4699 411.1163 772.3521
-#>  [9] 354.3683 251.3533 187.8603 549.5102 854.1536 726.3936 314.0420 326.5617
-#> [17] 274.8794 572.5922 501.7862 687.9644 203.4475 518.2744 772.3509 813.4239
-#> [25] 238.1283 253.0831 549.7515 303.5467 177.8304 326.9650
+#>  [1] 670.9607 503.3100 316.2073 274.8785 801.8549 251.4250 706.4645 411.1184
+#>  [9] 772.3675 354.4219 187.9791 549.1562 854.1438 726.5067 326.5962 572.6050
+#> [17] 314.2619 688.0916 502.1091 516.8439 203.5130 238.0623 810.7499 772.4268
+#> [25] 253.0410 549.7478 308.1590 178.2623 801.5274 276.4495
 
 # plot the fit
 library(ggplot2)
