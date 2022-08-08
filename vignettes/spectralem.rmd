@@ -152,11 +152,11 @@ plot_helper <- function(x, y, fit){
   library(htmltools)
   library(ggplot2)
   pd <- data.frame(x = x, y = y, fit = fit)
-  s <- svgstring()
+  svg_plot <- svglite::svgstring()
   ggplot(pd, aes(x)) +
     geom_line(aes(y = y, colour = "y")) +
     geom_line(aes(y = fit, colour = "fit")) +
     theme_bw()
-  htmltools::HTML(s())
+  htmltools::HTML(svg_plot())
 }
 ```
