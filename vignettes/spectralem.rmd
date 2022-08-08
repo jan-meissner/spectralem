@@ -17,7 +17,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
-  message = FALSE
+  message = FALSE,
+  fig.path = "man/figures/GETSTARTED-",
+  out.width = "100%",
+  dev = "svg" # set output device to svg
 )
 set.seed(1234)
 ```
@@ -47,4 +50,11 @@ res$fit_params$pos
 fit <- voigt.model(x, res$fit_params)
 # or alternatively fit <- res$fit
 
+# plot the fit
+library(ggplot2)
+pd <- data.frame(x = x, y = y, fit = fit)
+ggplot(pd, aes(x)) +
+  geom_line(aes(y = y, colour = "y")) +
+  geom_line(aes(y = fit, colour = "fit")) +
+  theme_bw()
 ```
