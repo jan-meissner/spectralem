@@ -11,16 +11,13 @@ vignette: >
 fig_width: 6
 fig_height: 12
 ---
-
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   warning = FALSE,
   message = FALSE,
-  fig.path = "man/figures/GETSTARTED-",
-  out.width = "100%",
-  dev = "svg" # set output device to svg
+  out.width = "100%"
 )
 set.seed(1234)
 ```
@@ -35,14 +32,25 @@ Their amplitudes are constrained to $\alpha_i > 0$.
 The algorithm takes roughly a minute to fit 30 peaks.
 
 ## General Usage
-```{r, fig.width=8, fig.height=4}
+```{r, include = FALSE}
+# helper function for plotting
+plot_helper <- function(x, y, fit){
+  library(ggplot2)
+  pd <- data.frame(x = x, y = y, fit = fit)
+  ggplot(pd, aes(x)) +
+    geom_line(aes(y = y, colour = "y")) +
+    geom_line(aes(y = fit, colour = "fit")) +
+    theme_bw()
+}
+```
+```{r, fig.width=8, fig.height=4, dpi = 600}
 library(spectralem)
 
 data <- synthetic.signal(seed = 1, K = 30, noise = 0.005)
 x <- data$x
 y <- data$y
 
-res <- spectralem(x, y, K = 3, print_progress = FALSE) # no progress bar for vignettes
+res <- spectralem(x, y, K = 30, print_progress = FALSE) # no progress bar for vignettes
 
 # get position of fitted peaks
 res$fit_params$pos
@@ -50,11 +58,70 @@ res$fit_params$pos
 fit <- voigt.model(x, res$fit_params)
 # or alternatively fit <- res$fit
 
+# plot the fit using a helper function defined in the appendix
+plot_helper(x, y, fit)
+```
+
+## Passing optional Start Parameters
+
+Can be done by passing the additional list 'start_peaks'.
+```{r fig.width=8, fig.height=5, dpi = 600}
+data <- synthetic.signal(1212, 4, 0.001)
+
+res <- spectralem(
+  data$x, data$y,
+  K = 4,
+  start_peaks = list(
+    pos = c(465, 644, 828, 862),
+    gwidth = c(5, 5, 5, 5),
+    lwidth = c(0.1, 0.1, 0.1, 0.1)
+  ),
+  print_progress = FALSE # no progress bar for vignettes
+)
+
 # plot the fit
-library(ggplot2)
-pd <- data.frame(x = x, y = y, fit = fit)
-ggplot(pd, aes(x)) +
-  geom_line(aes(y = y, colour = "y")) +
-  geom_line(aes(y = fit, colour = "fit")) +
-  theme_bw()
+plot_helper(data$x, data$y, res$fit)
+```
+
+## Using BSplines as a Background Model
+
+Using 'background_model' any fixed background signal can be added. It is not advised to set 'linear = FALSE'.
+```{r fig.width=8, fig.height=5, dpi = 600}
+data <- synthetic.signal(seed = 312, K = 4, noise = 0.005)
+x <- data$x
+y <- data$y
+
+# add spline background to data
+library(splines2)
+bsMat <- bSpline(x, df = 3)
+f1 <- c(bsMat[, 1])
+f2 <- c(bsMat[, 2])
+f3 <- c(bsMat[, 3])
+y <- y + 0.4 * f1 + 0.04 * f2 + 0.2 * f3
+
+# fit
+res <- spectralem(x, y, K = 4,
+                  background_model = list(linear = TRUE, f1, f2, f3), print_progress = FALSE)
+
+# voigt.model does not support non linear background; add them manually
+alpha <- res$fit_params$background_amps
+fit <- voigt.model(x, res$fit_params) + f1 * alpha[1] + f2 * alpha[2] + f3 * alpha[3]
+# or alternatively fit <- res$fit
+
+# plot the fit
+plot_helper(x, y, res$fit)
+```
+
+## Plotting Helper Function
+
+```{r}
+# helper function for plotting
+plot_helper <- function(x, y, fit){
+  library(ggplot2)
+  pd <- data.frame(x = x, y = y, fit = fit)
+  ggplot(pd, aes(x)) +
+    geom_line(aes(y = y, colour = "y")) +
+    geom_line(aes(y = fit, colour = "fit")) +
+    theme_bw()
+}
 ```
