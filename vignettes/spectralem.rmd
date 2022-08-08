@@ -148,15 +148,16 @@ plot_helper(x, y, res$fit)
 ```{r}
 # helper function for plotting
 plot_helper <- function(x, y, fit){
-  library(svglite)
-  library(htmltools)
-  library(ggplot2)
-  pd <- data.frame(x = x, y = y, fit = fit)
-  svg_plot <- svglite::svgstring()
-  ggplot(pd, aes(x)) +
-    geom_line(aes(y = y, colour = "y")) +
-    geom_line(aes(y = fit, colour = "fit")) +
-    theme_bw()
-  htmltools::HTML(svg_plot())
+  #library(svglite)
+  #library(htmltools)
+  #library(ggplot2)
+  #pd <- data.frame(x = x, y = y, fit = fit)
+  #svg_plot <- svglite::svgstring()
+  #ggplot(pd, aes(x)) +
+  #  geom_line(aes(y = y, colour = "y")) +
+  #  geom_line(aes(y = fit, colour = "fit")) +
+  #  theme_bw()
+  #htmltools::HTML(svg_plot())
+  1
 }
 ```
