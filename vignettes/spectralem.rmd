@@ -48,7 +48,7 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = FALSE,
   out.width = "100%",
-  dev = "svglite" # set output device to svg
+  dev = "svg" # set output device to svg
 )
 set.seed(1234)
 ```
@@ -66,12 +66,17 @@ The algorithm takes roughly a minute to fit 30 peaks.
 ```{r, include = FALSE}
 # helper function for plotting
 plot_helper <- function(x, y, fit){
-  library(ggplot2)
-  pd <- data.frame(x = x, y = y, fit = fit)
-  ggplot(pd, aes(x)) +
-    geom_line(aes(y = y, colour = "y")) +
-    geom_line(aes(y = fit, colour = "fit")) +
-    theme_bw()
+  #library(svglite)
+  #library(htmltools)
+  #library(ggplot2)
+  #pd <- data.frame(x = x, y = y, fit = fit)
+  ##svg_plot <- svglite::svgstring()
+  ##htmltools::HTML(svg_plot())
+  #ggplot(pd, aes(x)) +
+  #  geom_line(aes(y = y, colour = "y")) +
+  #  geom_line(aes(y = fit, colour = "fit")) +
+  #  theme_bw()
+  1
 }
 ```
 ```{r, fig.width=8, fig.height=4}
@@ -81,7 +86,7 @@ data <- synthetic.signal(seed = 1, K = 30, noise = 0.005)
 x <- data$x
 y <- data$y
 
-res <- spectralem(x, y, K = 30, print_progress = FALSE) # no progress bar for vignettes
+res <- spectralem(x, y, K = 3, print_progress = FALSE) # no progress bar for vignettes
 
 # get position of fitted peaks
 res$fit_params$pos
@@ -148,16 +153,11 @@ plot_helper(x, y, res$fit)
 ```{r}
 # helper function for plotting
 plot_helper <- function(x, y, fit){
-  #library(svglite)
-  #library(htmltools)
-  #library(ggplot2)
-  #pd <- data.frame(x = x, y = y, fit = fit)
-  #svg_plot <- svglite::svgstring()
-  #ggplot(pd, aes(x)) +
-  #  geom_line(aes(y = y, colour = "y")) +
-  #  geom_line(aes(y = fit, colour = "fit")) +
-  #  theme_bw()
-  #htmltools::HTML(svg_plot())
-  1
+  library(ggplot2)
+  pd <- data.frame(x = x, y = y, fit = fit)
+  ggplot(pd, aes(x)) +
+    geom_line(aes(y = y, colour = "y")) +
+    geom_line(aes(y = fit, colour = "fit")) +
+    theme_bw()
 }
 ```
