@@ -80,7 +80,28 @@
 <p>The R package <strong>spectralem</strong> uses a EM algorithm <paperref> to fit a model of Voigt profiles to a signal: <span class="math display">\[
 f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f_i(x)
 \]</span> Here <span class="math inline">\(\beta_j &gt; 0\)</span> are the amplitudes of the Voigt profiles <span class="math inline">\(V\)</span> where <span class="math inline">\(\theta_j\)</span> represents the position, Gaussian and Lorentzian width of it. Additionally, it is possible to fit arbitrary positive background functions , these are by default zero. Their amplitudes are constrained to <span class="math inline">\(\alpha_i &gt; 0\)</span>.</paperref></p>
-  </main>
+<p>The algorithm takes roughly a minute to fit 30 peaks.</p>
+<div class="section level2">
+<h2 id="general-usage">General Usage<a class="anchor" aria-label="anchor" href="#general-usage"></a>
+</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jan-meissner/spectralem" class="external-link">spectralem</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synthetic.signal.html">synthetic.signal</a></span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">1</span>, K <span class="op">=</span> <span class="fl">30</span>, noise <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">y</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectralem.html">spectralem</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, K <span class="op">=</span> <span class="fl">3</span>, print_progress <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># no progress bar for vignettes</span></span>
+<span></span>
+<span><span class="co"># get position of fitted peaks</span></span>
+<span><span class="va">res</span><span class="op">$</span><span class="va">fit_params</span><span class="op">$</span><span class="va">pos</span></span>
+<span><span class="co">#&gt; [1] 672.0877 503.4254 326.0592</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/voigt.model.html">voigt.model</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">res</span><span class="op">$</span><span class="va">fit_params</span><span class="op">)</span></span>
+<span><span class="co"># or alternatively fit &lt;- res$fit</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
