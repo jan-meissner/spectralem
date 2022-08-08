@@ -32,6 +32,6 @@ devtools::run_examples()
 # building
 devtools::build()
 #devtools::release()
-
+usethis::use_vignette("my-vignette")
 
 
