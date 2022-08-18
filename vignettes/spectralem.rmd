@@ -62,9 +62,9 @@ fit <- voigt.model(x, res$fit_params)
 plot_helper(x, y, fit)
 ```
 
-## Passing optional Start Parameters
+## Passing Optional Start Parameters
 
-Can be done by passing the additional list 'start_peaks'.
+Can be done by passing the additional parameter `start_peaks`.
 ```{r fig.width=8, fig.height=5, dpi = 600}
 data <- synthetic.signal(1212, 4, 0.001)
 
@@ -85,7 +85,7 @@ plot_helper(data$x, data$y, res$fit)
 
 ## Using BSplines as a Background Model
 
-Using 'background_model' any fixed background signal can be added. It is not advised to set 'linear = FALSE'.
+Using `background_model` any fixed background signal can be added. It is not advised to set `linear = FALSE`. The algorithm struggles with background modeling as visible in the following plot, and it should be removed prior to usage.
 ```{r fig.width=8, fig.height=5, dpi = 600}
 data <- synthetic.signal(seed = 312, K = 4, noise = 0.005)
 x <- data$x

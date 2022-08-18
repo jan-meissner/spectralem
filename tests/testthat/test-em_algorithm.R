@@ -75,6 +75,21 @@ test_that("test em_algorithm basecase_running_start", {
   check_if_fit_params_are_correct(data$x, res)
 })
 
+test_that("test em_algorithm basecase_running_start_pi_burn_in", {
+  data <- synthetic.signal(311311, 7, 0.001)
+
+  res <- spectralem(
+    data$x, data$y,
+    K = 7, max_iter = 2, add_component_every_iters = -5,
+    start_peaks = data$params
+  )
+
+  # ok fit;
+  expect_equal(sort(data$params$pos), sort(res$fit_params$pos), tol = 1e-3)
+  expect_equal(sum((res$fit - data$y)^2), 0, tol = 1e-3)
+  check_if_fit_params_are_correct(data$x, res)
+})
+
 test_that("test em_algorithm no_background", {
   data <- synthetic.signal(213, 4, 0.0000000001)
   y <- data$y + 0.00002 * data$x

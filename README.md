@@ -8,13 +8,13 @@
 
 ## Installation
 
-If `RcppFaddeeva` is not available for the current R version use:
+1. If `RcppFaddeeva` is not available for the current R version use:
 
-``` r
-remotes::install_version("RcppFaddeeva", "0.2.2")
-```
+    ``` r
+    remotes::install_version("RcppFaddeeva", "0.2.2")
+    ```
 
-You can install the development version with:
+2. You can install the development version with:
 
 ``` r
 remotes::install_github("jan-meissner/spectralem")
