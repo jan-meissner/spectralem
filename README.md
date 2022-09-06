@@ -8,13 +8,13 @@
 
 ## Installation
 
-1.  If `RcppFaddeeva` is not available for the current R version use:
+If `RcppFaddeeva` is not available for the current R version use:
 
 ``` r
-remotes::install_github("cran/RcppFaddeeva")
+remotes::install_version("RcppFaddeeva", "0.2.2")
 ```
 
-2.  You can install the development version with:
+You can install the development version with:
 
 ``` r
 remotes::install_github("jan-meissner/spectralem")
@@ -22,7 +22,7 @@ remotes::install_github("jan-meissner/spectralem")
 
 ## Examples
 
-Fitting 30 Peaks:
+Fit Voigt profiles to some signal defined by `x` and `y`.
 
 ``` r
 library(spectralem)
