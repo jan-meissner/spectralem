@@ -108,9 +108,9 @@ f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f
 <p><img src="spectralem_files/figure-html/unnamed-chunk-2-1.png" width="100%"></p>
 </div>
 <div class="section level2">
-<h2 id="passing-optional-start-parameters">Passing optional Start Parameters<a class="anchor" aria-label="anchor" href="#passing-optional-start-parameters"></a>
+<h2 id="passing-optional-start-parameters">Passing Optional Start Parameters<a class="anchor" aria-label="anchor" href="#passing-optional-start-parameters"></a>
 </h2>
-<p>Can be done by passing the additional list ‘start_peaks’.</p>
+<p>Can be done by passing the additional parameter <code>start_peaks</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synthetic.signal.html">synthetic.signal</a></span><span class="op">(</span><span class="fl">1212</span>, <span class="fl">4</span>, <span class="fl">0.001</span><span class="op">)</span></span>
 <span></span>
@@ -132,7 +132,7 @@ f(x) = a x + b + \sum_{j=1}^K \beta_j V(x \mid \theta_j) + \sum_{i=1} \alpha_i f
 <div class="section level2">
 <h2 id="using-bsplines-as-a-background-model">Using BSplines as a Background Model<a class="anchor" aria-label="anchor" href="#using-bsplines-as-a-background-model"></a>
 </h2>
-<p>Using ‘background_model’ any fixed background signal can be added. It is not advised to set ‘linear = FALSE’.</p>
+<p>Using <code>background_model</code> any fixed background signal can be added. It is not advised to set <code>linear = FALSE</code>. The algorithm struggles with background modeling as visible in the following plot, and it should be removed prior to usage.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/synthetic.signal.html">synthetic.signal</a></span><span class="op">(</span>seed <span class="op">=</span> <span class="fl">312</span>, K <span class="op">=</span> <span class="fl">4</span>, noise <span class="op">=</span> <span class="fl">0.005</span><span class="op">)</span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span></span>
