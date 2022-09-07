@@ -8,13 +8,13 @@
 
 ## Installation
 
-If `RcppFaddeeva` is not available for the current R version use:
+1.  If `RcppFaddeeva` is not available for the current R version use:
 
 ``` r
-remotes::install_version("RcppFaddeeva", "0.2.2")
+remotes::install_github("cran/RcppFaddeeva")
 ```
 
-You can install the development version with:
+2.  You can install the development version with:
 
 ``` r
 remotes::install_github("jan-meissner/spectralem")
@@ -22,7 +22,7 @@ remotes::install_github("jan-meissner/spectralem")
 
 ## Examples
 
-Fit Voigt profiles to some signal defined by `x` and `y`.
+Fitting 30 Peaks:
 
 ``` r
 library(spectralem)
@@ -58,4 +58,4 @@ This work was developed under a Seed Fund Project (2021) of the RWTH
 Aachen University, funded under “the Excellence Strategy of the Federal
 Government and the Länder”. Project: “Spectra-Bayes: A Bayesian
 statistical machine learning model for spectral reconstruction” (Project
-Leaders: Prof. Dr. Maria Kateri, Prof. Dr.-Ing. Hans-Jürgen Koß)”
+Leaders: Prof. Dr. Maria Kateri, Prof. Dr.-Ing. Hans-Jürgen Koß)
