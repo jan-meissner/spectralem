@@ -55,6 +55,8 @@ AbstractComponent <- R6::R6Class(
     #' @param rf vector of the product between p_y and the responsiblity vector of the given component.
     Q = function(x, rf) {
       private$Q_calls <- private$Q_calls + 1
+
+      # calculate q, integrate it to find Q
       q <- rf * log(self$density(x))
       if (!all(is.finite(q))) {
         stop("Integrand is not finite!")

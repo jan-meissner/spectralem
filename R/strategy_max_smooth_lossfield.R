@@ -46,19 +46,21 @@ StrategyMaxSmoothLossfield <- R6::R6Class(
     #' @param components a list of AbstractComponents.
     #' @return new components list with the new peak added.
     place_new_peak = function(x, p_y, components) {
-      # no other components
+      # special case if there are no other components
       if (length(components) == 0) {
         new_comp <- list(private$get_voigt_at_pos(x[which.max(p_y)], 1))
         comps <- private$optimize_new_component_parameters(x, p_y, list(), new_comp)
         return(comps)
       }
 
+      # compute smoothed lossfield
       smooth_lossfield_int_cor <- private$get_smoothed_lossfield(x, p_y, components)
 
+      # new pos where lossfield is maximal
       new_pos <- x[which.max(smooth_lossfield_int_cor)]
       new_comp <- private$get_voigt_at_pos(new_pos, 1 / length(components))
 
-      # optimize placed peak parameters
+      # optimize placed peak parameters, improves algorithm slightly, not strictly needed.
       private$optimize_new_component_parameters(x, p_y, components, new_comp)
     }
   ),
@@ -88,6 +90,7 @@ StrategyMaxSmoothLossfield <- R6::R6Class(
 
       smooth_lossfield_int_cor
     },
+
     get_voigt_at_pos = function(pos, pi) {
       ComponentTrunctVoigt$new(
         min_width = self$min_width,
@@ -98,11 +101,15 @@ StrategyMaxSmoothLossfield <- R6::R6Class(
         lwidth = self$typical_width / 10 # min_width?
       )$set_pi(pi)
     },
+
     optimize_new_component_parameters = function(x, p_y, components, new_comp) {
+      # fix all components, but the new one, and run the EM-algorthm for a few iterations in that setup
+
       fixed_comps <- lapply(components, function(comp) {
         comp$to_fixed_component(x)
       })
 
+      # em algorithm
       fixed_comps <- c(fixed_comps, new_comp)
       for (i in 1:self$burn_in_iters) {
         resp <- calculate_responsibilities(x, fixed_comps)
@@ -110,6 +117,7 @@ StrategyMaxSmoothLossfield <- R6::R6Class(
         calc_and_assign_new_pi(x, resp * p_y, fixed_comps)
       }
 
+      # set pi's from the ran em algorithm
       new_comps <- c(components, new_comp)
       mapply(function(fixed_comp, comp) {
         comp$set_pi(fixed_comp$pi)

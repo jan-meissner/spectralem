@@ -128,6 +128,7 @@ load_default_controls <- function(out){
     con[(namc <- names(control))] <- out$control
 }
 
+# Preprocess input for use in algorithm
 preprocess <- function(x, y, max_peaks,
                        start_peaks,
                        background_model,
@@ -136,6 +137,7 @@ preprocess <- function(x, y, max_peaks,
                        max_iter,
                        min_width,
                        possible_peak_positions) {
+  # create internal data object for use in algorithm
   out <- list(
     x = x,
     y = y,
@@ -149,17 +151,32 @@ preprocess <- function(x, y, max_peaks,
     possible_peak_positions = possible_peak_positions
   )
 
-  # init convergence diagnostic
+  # Init convergence diagnostic
   out$convergence_diagnostic <- rep(NA, out$max_iter)
 
+  # Scale x-range to [0,1] for numeric consitency.
   out <- unit_scale_x(out)
+
+  # Due to rescaling of the x-range, width parameters and positions need to be rescaled aswell
   out <- unit_scale_hyperparams(out)
+
+  # Calculate p_y, the density that is to be fit by EM.
   out <- calculate_py(out)
+
+  # Initialize background components
   out <- init_background(out)
+
+  # Initialize strategy used to place peaks,
+  # for now the only on implemented is the one described in the paper.
   out <- init_strategy(out)
+
+  # Initialize non-background components
   out <- init_components(out)
+
+  # Static burn-in process of inital Pi's, not strictly needed, but improves the speed of the algorithm.
   out <- burn_in_pis(out)
 
+  # Sanity checks.
   check_max_iters(out)
   check_numer_of_x_points(out)
 

@@ -15,6 +15,7 @@ calc_and_assign_new_pi <- function(x, ry, components) {
   }, components, seq_along(components))
 }
 
+# Q is the partial loglikelihood; see "component_abstract" > function "Q"
 maximize_Qk <- function(x, y, resp, components) {
   mapply(function(c, j) {
     c$fit(x, resp[, j] * y)
@@ -106,6 +107,9 @@ spectralem <- function(x, y, K,
                        min_width = 1e-6 * mean(diff(x)),
                        possible_peak_positions = range(x),
                        print_progress = TRUE) {
+
+  # preprocess input to create internal data object
+  # contains d$x, d$p_y, d$components which are central to the algorithm
   d <- preprocess(x, y, K,
     start_peaks = start_peaks,
     background_model = background_model,
@@ -132,6 +136,7 @@ spectralem <- function(x, y, K,
     # M-Step, second step
     calc_and_assign_new_pi(x, resp * p_y, d$components)
 
+    # Place a new peak, if necessary
     if (((i %% add_component_every_iters) == (add_component_every_iters - 1))) {
       if (length(d$components) < d$final_num_components) {
         d$components <- d$placement_strategy$place_new_peak(x, p_y, d$components)
@@ -139,5 +144,6 @@ spectralem <- function(x, y, K,
     }
   }
 
+  # create output object
   postprocess(d)
 }
